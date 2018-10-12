@@ -1,4 +1,4 @@
-" ************ global settings ************
+" --- global settings ---
 
 " system colorscheme
 "colorscheme desert
@@ -14,9 +14,26 @@ set number
 set background=dark
 " highlight words which be searched
 set hlsearch
+
+" Smart indent
+set smartindent
+" 打开自动缩进
+set autoindent
+
+" 设置Tab键的宽度        [等同的空格个数]
 set tabstop=4
+" 按退格键时可以一次删掉 4 个空格
 set softtabstop=4
+" 每一次缩进对应的空格数
 set shiftwidth=4
+" insert tabs on the start of a line according to shiftwidth, not tabstop
+set smarttab
+" 将Tab自动转化成空格[需要输入真正的Tab键时，使用 Ctrl+V + Tab]
+set expandtab
+" 缩进时，取整 use multiple of shiftwidth when indenting with '<' and '>'
+set shiftround
+
+
 set laststatus=2
 
 function! CurDir()
@@ -46,11 +63,21 @@ set ignorecase smartcase
 hi ColorColumn ctermbg=lightgreen
 autocmd FileType python,c,cpp set cc=131
 
-" ************* operation key map ***************
+" --- operation key map ---
 " 删除行尾空格
 " map <F4> <ESC>:%s/\s\+$//g <CR>
 
-" ************* plugins ***************
+" --- python ---
+func SetPyHead()
+	call setline(1, "#! /usr/bin/env python")
+	call append(1, "# -*- coding: utf-8 -*-")
+	normal G 
+	normal o 
+	normal o 
+endfunc
+autocmd bufnewfile *.py call SetPyHead()
+
+" --- plugins ---
 
 " Vundle
 " :PluginInstall    - installs plugins; append `!` to update or just
@@ -62,6 +89,7 @@ Plugin 'Yggdroot/indentLine'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 "Plugin 'Valloric/YouCompleteMe'
+Plugin 'davidhalter/jedi-vim'
 call vundle#end()
 filetype plugin indent on
 
@@ -85,3 +113,6 @@ let g:indentLine_color_gui = '#A4E57E'
 " let g:NERDSpaceDelims = 1
 " Align line-wise comment delimiters flush left instead of following code indentation
 let g:NERDDefaultAlign = 'left'
+
+" jedi-vim
+let g:jedi#show_call_signatures = "1"
